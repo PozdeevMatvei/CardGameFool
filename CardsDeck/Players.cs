@@ -6,15 +6,18 @@ namespace CardsDeck
 {
     class Player
     {
+        string name;
         Cards[] hand;
         int countHand;
-        public Player()
+        public Player(string name)
         {
+            this.name = name;
             hand = new Cards[36];
             countHand = 0;
         }
         public int CountHand { get { return countHand; } private set { } }
         public Cards[] Hand { get { return hand;} private set { } }
+        public string Name { get { return name; } private set { } }
         public void TakeInHand(Cards card)
         {
             hand[countHand] = card;

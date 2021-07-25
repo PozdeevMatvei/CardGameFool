@@ -61,16 +61,16 @@ namespace CardsDeck
             if (min1 != min2)
             {
                 if (min1 < min2)
-                    Console.WriteLine("Первым ходит первый игрок");
+                    Console.WriteLine("Первым ходит {0}",player1.Name);
                 else
-                    Console.WriteLine("Первым ходит второй игрок");
+                    Console.WriteLine("Первым ходит {0}",player2.Name);
             }
             else
             {
                 if (r.Next(1, 3) == 1)
-                    Console.WriteLine("Первым ходит первый игрок");
+                    Console.WriteLine("Первым ходит {0}",player1.Name);
                 else
-                    Console.WriteLine("Первым ходит второй игрок");
+                    Console.WriteLine("Первым ходит {0}",player2.Name);
             }
             
         }

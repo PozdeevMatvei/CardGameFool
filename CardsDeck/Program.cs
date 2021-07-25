@@ -12,8 +12,8 @@ namespace CardsDeck
             deck36.CardsDeckShow();
             Console.WriteLine("---------");
 
-            Player player1 = new Player();
-            Player player2 = new Player();
+            Player player1 = new Player("player1");
+            Player player2 = new Player("player2");
             StartGame game1 = new StartGame(player1,player2);
 
             game1.ShuffleCardsDeck(deck36);
