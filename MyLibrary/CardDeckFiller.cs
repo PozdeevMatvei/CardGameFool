@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CardsDeck
+namespace MyLibrary
 {
-    class CardDeckFiller
+    public class CardDeckFiller
     {
         public static void Filler(Deck deckCards)
         {
@@ -17,7 +14,7 @@ namespace CardsDeck
                 {
                     deckCards.CardsDeck = new Cards(nameCard[attack], suit[i], attack + 6);
                 }
-            }            
+            }
         }
     }
 }

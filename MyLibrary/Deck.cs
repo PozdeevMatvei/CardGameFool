@@ -3,34 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CardsDeck
+namespace MyLibrary
 {
-    class Cards
-    {
-        string name;
-        string suit;
-        int attack;
-        int trump;
-        public Cards(string name, string suit, int attack)
-        {
-            this.name = name;
-            this.suit = suit;
-            this.attack = attack;
-            trump = 0;
-        }
-        public string NameCard { get { return name; } private set { } }      
-        public string SuitCard { get { return suit; } private set { } }
-        public int AttackCard { get { return attack; } private set { } }
-        public int Trump 
-        { get { return trump; } 
-            set 
-            {
-                if (value == 0 || value == 1)
-                    trump = value;
-            }
-        }
-    }
-    class Deck : IEnumerable
+    public class Deck : IEnumerable
     {
         Cards[] cardsDeck;
         int count;
@@ -48,7 +23,7 @@ namespace CardsDeck
         public Cards CardsDeck
         {
             get { return cardsDeck[count]; }
-            set 
+            set
             {
                 if (count < 36)
                 {
@@ -64,17 +39,17 @@ namespace CardsDeck
                 Cards e = cardsDeck[i];
                 Console.WriteLine("{0} {1} {2}", e.NameCard, e.SuitCard, e.AttackCard);
             }
-            Console.WriteLine("Number cards in deck {0}",count);
+            Console.WriteLine("Number cards in deck {0}", count);
         }
         public Cards TakeCardFromDeck()
         {
-            Cards takeCard = cardsDeck[count-1];
-            cardsDeck[count-1] = null;
+            Cards takeCard = cardsDeck[count - 1];
+            cardsDeck[count - 1] = null;
             count--;
             return takeCard;
         }
         #region IEnum        
-        private class MyEnumerator:IEnumerator
+        private class MyEnumerator : IEnumerator
         {
             Cards[] cardsDeck;
             int pozition = -1;
