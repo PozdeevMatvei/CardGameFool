@@ -8,28 +8,66 @@ namespace MyLibrary
     public class Deck : IEnumerable
     {
         Cards[] cardsDeck;
+        int length;
         int count;
+
         public Deck()
         {
             cardsDeck = new Cards[36];
             count = 0;
+            length = 36;
         }
         public Cards this[int index]
-        {
-            get { return cardsDeck[index]; }
-            set { cardsDeck[index] = value; }
+        {                   
+            get 
+            {
+                if (Ok(index))
+                {
+                    return cardsDeck[index];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (Ok(index) & (value != null || cardsDeck[index] != null))
+                {
+                    if (value == null)
+                    {
+                        cardsDeck[count - 1] = value;
+                        count--;
+                    }
+                    else if (cardsDeck[index] != null)
+                    {
+                        cardsDeck[index] = value;
+                    }
+                    else
+                    {
+                        cardsDeck[count] = value;
+                        count++;
+                    }
+                }
+            }           
         }
         public int Count { get { return count; } private set { } }
+        public int Length { get { return length; } private set { } }
         public Cards CardsDeck
         {
-            get { return cardsDeck[count]; }
+            get 
+            { 
+                if (count < 36)
+                    return cardsDeck[count];
+                return null;
+            }
             set
             {
                 if (count < 36)
                 {
                     cardsDeck[count] = value;
                     count++;
-                }
+                }              
             }
         }
         public void CardsDeckShow()
@@ -47,6 +85,12 @@ namespace MyLibrary
             cardsDeck[count - 1] = null;
             count--;
             return takeCard;
+        }
+        private bool Ok(int index)
+        {
+            if (index >= 0 & index < 36)
+                return true;
+            return false;
         }
         #region IEnum        
         private class MyEnumerator : IEnumerator
