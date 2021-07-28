@@ -4,8 +4,20 @@ using System.Text;
 
 namespace MyLibrary
 {
-    public class Cards
+    public class Cards : IComparable
     {
+        public int CompareTo(object obj)
+        {
+            Cards card = obj as Cards;
+            if (card != null)
+            {
+                return this.AttackCard.CompareTo(card.AttackCard);
+            }
+            else
+            {
+                throw new ArgumentException("object is not myArray");
+            }
+        }
         string name;
         string suit;
         int attack;

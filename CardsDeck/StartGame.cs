@@ -44,7 +44,7 @@ namespace CardsDeck
             }
             Console.WriteLine("Козырь {0}", trump.SuitCard);
         }
-        public void WhoseMove(Cards[] hand1, Cards[] hand2)
+        public bool WhoseMove(Cards[] hand1, Cards[] hand2)
         {
             int min1 = 15;
             int min2 = 15;
@@ -62,16 +62,28 @@ namespace CardsDeck
             if (min1 != min2)
             {
                 if (min1 < min2)
-                    Console.WriteLine("Первым ходит {0}",player1.Name);
+                {
+                    Console.WriteLine("Первым ходит {0}", player1.Name);
+                    return true;
+                }
                 else
-                    Console.WriteLine("Первым ходит {0}",player2.Name);
+                {
+                    Console.WriteLine("Первым ходит {0}", player2.Name);
+                    return false;
+                }
             }
             else
             {
                 if (r.Next(1, 3) == 1)
-                    Console.WriteLine("Первым ходит {0}",player1.Name);
+                {
+                    Console.WriteLine("Первым ходит {0}", player1.Name);
+                    return true;
+                }
                 else
-                    Console.WriteLine("Первым ходит {0}",player2.Name);
+                {
+                    Console.WriteLine("Первым ходит {0}", player2.Name);
+                    return false;
+                }
             }
             
         }
