@@ -4,14 +4,16 @@ using System.Text;
 
 namespace MyLibrary
 {
-    class GameDesk
+    public class GameDesk
     {
         List<Cards> desk;
+        int length;
         Cards card;
 
         public GameDesk()
         {
-            desk = new List<Cards>();            
+            desk = new List<Cards>();
+            length = 0;
         }
         public List<Cards> Desk
         {
@@ -21,7 +23,8 @@ namespace MyLibrary
             }
             private set { }
         }
-        public void AttackDesk(Cards cardAttack)
+        public int Length { get { return length; } private set { } }
+        public void GettingAttackPlayerCard(Cards cardAttack)
         {            
             card = cardAttack;
         }
@@ -51,10 +54,11 @@ namespace MyLibrary
                 return false;
             }
         }
-        private void DeskAdd(Cards attack, Cards protect)
+        void DeskAdd(Cards attack, Cards protect)
         {
             desk.Add(attack);
             desk.Add(protect);
+            length += 2;
         }
 
     }

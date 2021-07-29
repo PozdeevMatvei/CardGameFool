@@ -15,8 +15,9 @@ namespace CardsDeck
 
             Player player1 = new Player("player1");
             Player player2 = new Player("player2");
+            GameDesk gameDesk1 = new GameDesk();
             StartGame game1 = new StartGame(player1, player2);
-            Game playfool = new Game(player1, player2);
+            Game playfool = new Game(player1, player2, gameDesk1);
 
             game1.ShuffleCardsDeck(deck36);
             game1.TrumpSuit(deck36);

@@ -57,6 +57,14 @@ namespace CardsDeck
             hand[countHand] = card;
             countHand++;
         }
+        public Cards GiveCardHand()
+        {
+            Cards tmp = hand[countHand-1];
+            hand[countHand-1] = null;
+            countHand--;
+            return tmp;
+        }
+       
         public void ShowHand()
         {
             foreach(var card in hand)
