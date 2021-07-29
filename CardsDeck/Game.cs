@@ -27,20 +27,20 @@ namespace CardsDeck
             Array.Sort(player.Hand);
             Array.Reverse(player.Hand);
         }
-        //void PlayerAttack(Player player)
-        //{
-        //    int count = player.CountHand;
-        //    if(player.Hand[count] != null)
-        //    {
-        //        if(player.Hand[count].Trump == 0)
-        //        {
-        //            player.Hand[count] = null;
-        //        }
-        //    }
-        //}
-        //void PlayerProtection(Player player)
-        //{
+        public void PlayerAttack(Player player)
+        {
+            int count = player.CountHand;
+            if (player.Hand[count] != null)
+            {
+                if (player.Hand[count].Trump == 0)
+                {
+                    player.Hand[count] = null;
+                }
+            }
+        }
+        public void PlayerProtection(Player player)
+        {
 
-        //}
+        }
     }
 }
