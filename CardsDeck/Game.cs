@@ -12,10 +12,12 @@ namespace CardsDeck
     {
         Player player1;
         Player player2;
-        public Game(Player player1, Player player2) : base (player1,player2)
+        GameDesk gameDesk1;
+        public Game(Player player1, Player player2, GameDesk gameDesk1) : base (player1,player2)
         {
             this.player1 = player1;
             this.player2 = player2;
+            this.gameDesk1 = gameDesk1;
         }
         public int Compare(Object x, Object y)
         {
@@ -27,15 +29,29 @@ namespace CardsDeck
             Array.Sort(player.Hand);
             Array.Reverse(player.Hand);
         }
+        
+        public Cards CompareCardsHandDesk(Player player)
+        {
+            foreach(Cards cardHand in player.Hand)
+            {
+                foreach(Cards cardDesk in gameDesk1.Desk)
+                {
+                    if (cardHand.AttackCard == cardDesk.AttackCard)
+                        return player.GiveCardHand();
+                }
+            }
+            return null;
+        }
         public void PlayerAttack(Player player)
         {
-            int count = player.CountHand;
-            if (player.Hand[count] != null)
+            SortingCardsHand(player);
+            if(gameDesk1.Length == 0)
             {
-                if (player.Hand[count].Trump == 0)
-                {
-                    player.Hand[count] = null;
-                }
+                gameDesk1.GettingAttackPlayerCard(player.GiveCardHand());
+            }
+            else
+            {
+                CompareCardsHandDesk(player);
             }
         }
         public void PlayerProtection(Player player)
