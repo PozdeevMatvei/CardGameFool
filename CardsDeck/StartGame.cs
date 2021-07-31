@@ -33,7 +33,7 @@ namespace CardsDeck
             while (player2.CountHand < 6)
                 player2.TakeInHand(deck.TakeCardFromDeck());
         }
-        public void TrumpSuit(Deck deck)
+        public void DefineTrumpSuit(Deck deck)
         {
             Random r = new Random();
             Cards trump = deck[r.Next(deck.Count)];
@@ -44,48 +44,50 @@ namespace CardsDeck
             }
             Console.WriteLine("Козырь {0}", trump.SuitCard);
         }
-        public bool WhoseMove(Cards[] hand1, Cards[] hand2)
-        {
-            int min1 = 15;
-            int min2 = 15;
+        public Player WhoseMove(Player player1, Player player2)
+        {         
             Random r = new Random();
-            for(int i = 0; i < 6; i++)
-            {
-                if (hand1[i].Trump == 1)
-                    if (hand1[i].AttackCard < min1)
-                        min1 = hand1[i].AttackCard;
+            Player playerMinTrump = CompareMinTrumpPlayer(player1, player2);
 
-                if (hand2[i].Trump == 1)
-                    if (hand2[i].AttackCard < min2)
-                        min2 = hand2[i].AttackCard;
-            }
-            if (min1 != min2)
+            if (playerMinTrump != null)
             {
-                if (min1 < min2)
-                {
-                    Console.WriteLine("Первым ходит {0}", player1.Name);
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Первым ходит {0}", player2.Name);
-                    return false;
-                }
+                Console.WriteLine("Первым ходит {0}", playerMinTrump.Name);
+                return playerMinTrump;
+            }
+            else if (r.Next(1, 3) == 1)
+            {
+                Console.WriteLine("Первым ходит {0}", player1.Name);
+                return player1;
             }
             else
             {
-                if (r.Next(1, 3) == 1)
-                {
-                    Console.WriteLine("Первым ходит {0}", player1.Name);
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Первым ходит {0}", player2.Name);
-                    return false;
-                }
+                Console.WriteLine("Первым ходит {0}", player2.Name);
+                return player2;
+            }                      
+        }
+
+        int SearchMinTrumpFromHand(Player player)
+        {
+            int minAttackCard = 15; 
+            for (int i = 0; i < 6; i++)
+            {
+                if (player.Hand[i].Trump == 1)
+                    if (player.Hand[i].AttackCard < minAttackCard)
+                        minAttackCard = player.Hand[i].AttackCard;
             }
-            
+            return minAttackCard;
+        }
+        Player CompareMinTrumpPlayer(Player player1, Player player2)
+        {
+            int minTrumpPlayer1 = SearchMinTrumpFromHand(player1);
+            int minTrumpPlayer2 = SearchMinTrumpFromHand(player2);
+
+            if (minTrumpPlayer1 < minTrumpPlayer2)
+                return player1;
+            else if (minTrumpPlayer2 < minTrumpPlayer1)
+                return player2;
+            else
+                return null;
         }
     }  
 }

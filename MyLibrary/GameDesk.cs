@@ -24,11 +24,12 @@ namespace MyLibrary
             private set { }
         }
         public int Length { get { return length; } private set { } }
+
         public void GettingAttackPlayerCard(Cards cardAttack)
         {            
             card = cardAttack;
         }
-        public bool DeskProtected(Cards cardProtected)
+        public bool GettingProtectedPlayerCard(Cards cardProtected)
         {
             if (cardProtected.Trump == 1 & card.Trump == 1)
             {
@@ -37,6 +38,7 @@ namespace MyLibrary
                     DeskAdd(card, cardProtected);
                     return true;
                 }
+                desk.Add(card);
                 return false;
             }
             else if (cardProtected.Trump == 1 & card.Trump != 1)
@@ -51,9 +53,15 @@ namespace MyLibrary
             }
             else
             {
+                desk.Add(card);
                 return false;
             }
         }
+        public void PutCardsBat()
+        {
+            desk.Clear();
+        }
+
         void DeskAdd(Cards attack, Cards protect)
         {
             desk.Add(attack);
