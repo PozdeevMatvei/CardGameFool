@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using MyLibrary;
-// Добавить класс стол создать поле типа list | array для записи выложенных на стол карт
-//реализовать методы атаки и защиты сделать сбор карт со стола после хода либо на руку
-//либо в мусор. Сделать алгоритм ии.
+
 namespace CardsDeck
 {
     class Game : StartGame, IComparer
@@ -22,41 +20,78 @@ namespace CardsDeck
         public int Compare(Object x, Object y)
         {
             return (new CaseInsensitiveComparer()).Compare(y, x);
-        }
-
-        public void SortingCardsHand(Player player)
-        {           
-            Array.Sort(player.Hand);
-            Array.Reverse(player.Hand);
-        }
-        
-        public Cards CompareCardsHandDesk(Player player)
+        }        
+               
+        public void SkirmishPlayers(Player pAttack, Player pProtected)
         {
-            foreach(Cards cardHand in player.Hand)
+            if (PlayerAttack(pAttack))
             {
-                foreach(Cards cardDesk in gameDesk1.Desk)
+                if (PlayerProtection(pProtected))
                 {
-                    if (cardHand.AttackCard == cardDesk.AttackCard)
-                        return player.GiveCardHand();
+                    this.SkirmishPlayers(pAttack, pProtected);
                 }
-            }
-            return null;
-        }
-        public void PlayerAttack(Player player)
-        {
-            SortingCardsHand(player);
-            if(gameDesk1.Length == 0)
-            {
-                gameDesk1.GettingAttackPlayerCard(player.GiveCardHand());
+                else
+                {
+                    foreach (Cards card in gameDesk1.Desk)
+                    {
+                        pProtected.TakeInHand(card);
+                    }
+                }
             }
             else
             {
-                CompareCardsHandDesk(player);
+                gameDesk1.PutCardsBat();
             }
         }
-        public void PlayerProtection(Player player)
+      
+        bool PlayerAttack(Player player)
         {
-
+            bool attackFlag = false;
+            SortingCardsHand(player);
+            if (gameDesk1.Length == 0)
+            {
+                gameDesk1.GettingAttackPlayerCard(player.GiveCardHand());
+                attackFlag = true;
+            }
+            else
+            {
+                CompareCardsHandDesk(player, ref attackFlag);
+            }
+            return attackFlag;
+        }
+        Cards CompareCardsHandDesk(Player player, ref bool attackFlag)
+        {
+            foreach (Cards cardHand in player.Hand)
+            {
+                foreach (Cards cardDesk in gameDesk1.Desk)
+                {
+                    if (cardHand.AttackCard == cardDesk.AttackCard)
+                    {
+                        attackFlag = true;
+                        return player.GiveCardHand();
+                    }
+                }
+            }
+            attackFlag = false;
+            return null;
+        }
+        bool PlayerProtection(Player player)
+        {
+            SortingCardsHand(player);
+            foreach (var cardProtected in player.Hand)
+            {
+                if (gameDesk1.GettingProtectedPlayerCard(cardProtected))
+                {
+                    //gameDesk1.GettingProtectedPlayerCard(cardProtected);
+                    return true;
+                }
+            }
+            return false;
+        }
+        void SortingCardsHand(Player player1)
+        {
+            Array.Sort(player1.Hand);
+            Array.Reverse(player1.Hand);
         }
     }
 }

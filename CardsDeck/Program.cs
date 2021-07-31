@@ -1,6 +1,7 @@
 ﻿using System;
 using MyLibrary;
 
+#warning Пройтись по коду где стоит breakpoint исправить неработающие методы, сделать рефакторинг
 namespace CardsDeck
 {
     class Program
@@ -20,19 +21,30 @@ namespace CardsDeck
             Game playfool = new Game(player1, player2, gameDesk1);
 
             game1.ShuffleCardsDeck(deck36);
-            game1.TrumpSuit(deck36);
+            game1.DefineTrumpSuit(deck36);
             game1.DistributionCards(deck36);
-            game1.WhoseMove(player1.Hand, player2.Hand);
-            //Console.WriteLine("DECK CARDS");
-            //deck36.CardsDeckShow();
+            game1.WhoseMove(player1, player2);
+
+            while (deck36.CardsDeck != null || (player1.Hand != null & player2.Hand != null))
+            {
+                playfool.SkirmishPlayers(player1, player2);
+                game1.DistributionCards(deck36);
+
+                Console.WriteLine("DECK CARDS");
+                deck36.CardsDeckShow();
+                Console.WriteLine("---------");
+
+                Console.WriteLine("HAND PLAYER1");
+                player1.ShowHand();
+                Console.WriteLine("HAND PLAYER2");
+                player2.ShowHand();
+            }
+
             Console.WriteLine("----------");
             Console.WriteLine("HAND PLAYER1");
             player1.ShowHand();
             Console.WriteLine("HAND PLAYER2");
-            player2.ShowHand();
-            playfool.SortingCardsHand(player1);
-            Console.WriteLine("HAND PLAYER1 SORT");
-            player1.ShowHand();
+            player2.ShowHand();         
 
         }
     }
