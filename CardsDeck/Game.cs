@@ -6,16 +6,12 @@ using MyLibrary;
 
 namespace CardsDeck
 {
-    class Game : StartGame, IComparer
-    {
-        Player player1;
-        Player player2;
-        GameDesk gameDesk1;
-        public Game(Player player1, Player player2, GameDesk gameDesk1) : base (player1,player2)
+    class Game : IComparer
+    {      
+        GameDesk gameDesk;
+        public Game(GameDesk gameDesk)
         {
-            this.player1 = player1;
-            this.player2 = player2;
-            this.gameDesk1 = gameDesk1;
+            this.gameDesk = gameDesk;
         }
         public int Compare(Object x, Object y)
         {
@@ -23,75 +19,69 @@ namespace CardsDeck
         }        
                
         public void SkirmishPlayers(Player pAttack, Player pProtected)
-        {
+        {         
             if (PlayerAttack(pAttack))
             {
+                if (pProtected.Hand == null)
+                    return;
                 if (PlayerProtection(pProtected))
                 {
                     this.SkirmishPlayers(pAttack, pProtected);
                 }
                 else
                 {
-                    foreach (Cards card in gameDesk1.Desk)
+                    foreach (Cards card in gameDesk.Desk)
                     {
                         pProtected.TakeInHand(card);
                     }
+                    gameDesk.PutCardsBat();
                 }
             }
             else
             {
-                gameDesk1.PutCardsBat();
+                gameDesk.PutCardsBat();
             }
         }
       
         bool PlayerAttack(Player player)
         {
             bool attackFlag = false;
-            SortingCardsHand(player);
-            if (gameDesk1.Length == 0)
+            //SortingCardsHand(player);
+            if (gameDesk.Length == 0)
             {
-                gameDesk1.GettingAttackPlayerCard(player.GiveCardHand());
+                gameDesk.GettingAttackPlayerCard(player.GiveCardHand());
                 attackFlag = true;
             }
             else
             {
-                CompareCardsHandDesk(player, ref attackFlag);
+                Cards cardAttack = CompareCardsHandDesk(player, ref attackFlag);
+                if (attackFlag)
+                    gameDesk.GettingAttackPlayerCard(cardAttack);
             }
             return attackFlag;
         }
+        bool PlayerProtection(Player player)
+        {            
+            //SortingCardsHand(player);
+            return gameDesk.GettingProtected(player);           
+        }
         Cards CompareCardsHandDesk(Player player, ref bool attackFlag)
         {
-            foreach (Cards cardHand in player.Hand)
+            for (int index = player.CountHand-1; index <= 0; index++)
             {
-                foreach (Cards cardDesk in gameDesk1.Desk)
+                foreach (Cards cardDesk in gameDesk.Desk)
                 {
-                    if (cardHand.AttackCard == cardDesk.AttackCard)
+                    if (player[index].AttackCard == cardDesk.AttackCard)
                     {
                         attackFlag = true;
-                        return player.GiveCardHand();
+                        Cards cardAttack = player[index];
+                        player[index] = null;
+                        return cardAttack;
                     }
                 }
             }
             attackFlag = false;
             return null;
-        }
-        bool PlayerProtection(Player player)
-        {
-            SortingCardsHand(player);
-            foreach (var cardProtected in player.Hand)
-            {
-                if (gameDesk1.GettingProtectedPlayerCard(cardProtected))
-                {
-                    //gameDesk1.GettingProtectedPlayerCard(cardProtected);
-                    return true;
-                }
-            }
-            return false;
-        }
-        void SortingCardsHand(Player player1)
-        {
-            Array.Sort(player1.Hand);
-            Array.Reverse(player1.Hand);
-        }
+        }       
     }
 }

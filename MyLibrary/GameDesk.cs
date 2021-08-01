@@ -8,7 +8,7 @@ namespace MyLibrary
     {
         List<Cards> desk;
         int length;
-        Cards card;
+        Cards cardAttack;
 
         public GameDesk()
         {
@@ -27,41 +27,28 @@ namespace MyLibrary
 
         public void GettingAttackPlayerCard(Cards cardAttack)
         {            
-            card = cardAttack;
+            this.cardAttack = cardAttack;
         }
-        public bool GettingProtectedPlayerCard(Cards cardProtected)
+        public bool GettingProtected(Player player)
         {
-            if (cardProtected.Trump == 1 & card.Trump == 1)
+            for (int i = player.CountHand - 1; i <= 0; i--)
             {
-                if (cardProtected.AttackCard > card.AttackCard)
+                if (GettingProtectedPlayerCard(player.Hand[i]))
                 {
-                    DeskAdd(card, cardProtected);
+                    DeskAdd(cardAttack, player.Hand[i]);
                     return true;
                 }
-                desk.Add(card);
-                return false;
             }
-            else if (cardProtected.Trump == 1 & card.Trump != 1)
-            {
-                DeskAdd(card, cardProtected);
-                return true;
-            }
-            else if (card.Trump != 1 & cardProtected.AttackCard > card.AttackCard)
-            {
-                DeskAdd(card, cardProtected);
-                return true;
-            }
-            else
-            {
-                desk.Add(card);
-                return false;
-            }
+            Desk.Add(cardAttack);
+            return false;
         }
         public void PutCardsBat()
         {
             desk.Clear();
         }
 
+        
+       
         void DeskAdd(Cards attack, Cards protect)
         {
             desk.Add(attack);

@@ -9,26 +9,26 @@ namespace CardsDeck
         static void Main(string[] args)
         {
             Deck deck36 = new Deck();
-            CardDeckFiller.Filler(deck36);
+            DeckFiller.Filler(deck36);
             Console.WriteLine("DECK CARDS");
             deck36.CardsDeckShow();
             Console.WriteLine("---------");
 
             Player player1 = new Player("player1");
             Player player2 = new Player("player2");
-            GameDesk gameDesk1 = new GameDesk();
-            StartGame game1 = new StartGame(player1, player2);
-            Game playfool = new Game(player1, player2, gameDesk1);
+            GameDesk gameDesk = new GameDesk();
+            StartGame startGame = new StartGame(player1, player2);
+            Game game = new Game(gameDesk);
 
-            game1.ShuffleCardsDeck(deck36);
-            game1.DefineTrumpSuit(deck36);
-            game1.DistributionCards(deck36);
-            game1.WhoseMove(player1, player2);
+            startGame.ShuffleCardsDeck(deck36);
+            startGame.DefineTrumpSuit(deck36);
+            startGame.DistributionCards(deck36);
+            startGame.WhoseMove(player1, player2);
 
             while (deck36.CardsDeck != null || (player1.Hand != null & player2.Hand != null))
             {
-                playfool.SkirmishPlayers(player1, player2);
-                game1.DistributionCards(deck36);
+                game.SkirmishPlayers(player1, player2);
+                startGame.DistributionCards(deck36);
 
                 Console.WriteLine("DECK CARDS");
                 deck36.CardsDeckShow();
@@ -41,6 +41,8 @@ namespace CardsDeck
             }
 
             Console.WriteLine("----------");
+            //game.SortingCardsHand(player1);
+            //game.SortingCardsHand(player2);
             Console.WriteLine("HAND PLAYER1");
             player1.ShowHand();
             Console.WriteLine("HAND PLAYER2");

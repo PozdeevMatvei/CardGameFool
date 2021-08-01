@@ -53,21 +53,15 @@ namespace MyLibrary
         }
         public int Count { get { return count; } private set { } }
         public int Length { get { return length; } private set { } }
-        public Cards CardsDeck
+        public Cards[] CardsDeck
         {
             get 
-            { 
-                if (count < 36)
-                    return cardsDeck[count];
-                return null;
-            }
-            set
             {
-                if (count < 36)
-                {
-                    cardsDeck[count] = value;
-                    count++;
-                }              
+                return cardsDeck;
+            }
+            private set
+            {
+                       
             }
         }
         public void CardsDeckShow()

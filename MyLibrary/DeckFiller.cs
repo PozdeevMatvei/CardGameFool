@@ -1,7 +1,7 @@
 ﻿using System;
 namespace MyLibrary
 {
-    public class CardDeckFiller
+    public class DeckFiller
     {
         public static void Filler(Deck deckCards)
         {
@@ -12,7 +12,7 @@ namespace MyLibrary
             {
                 for (int attack = 0; attack < nameCard.Length; attack++)
                 {                   
-                    deckCards.CardsDeck = new Cards(nameCard[attack], suit[i], attack + 6);
+                    deckCards[deckCards.Count] = new Cards(nameCard[attack], suit[i], attack + 6);
                 }
             }
             
