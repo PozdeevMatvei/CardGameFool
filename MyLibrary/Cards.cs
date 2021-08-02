@@ -5,19 +5,7 @@ using System.Text;
 namespace MyLibrary
 {
     public class Cards : IComparable
-    {
-        public int CompareTo(object obj)
-        {
-            Cards card = obj as Cards;
-            if (card != null)
-            {
-                return this.AttackCard.CompareTo(card.AttackCard);
-            }
-            else
-            {
-                throw new ArgumentException("object is not myArray");
-            }
-        }
+    {      
         string name;
         string suit;
         int attack;
@@ -40,6 +28,29 @@ namespace MyLibrary
                 if (value == 0 || value == 1)
                     trump = value;
             }
+        }
+        public int CompareTo(object obj)
+        {
+            Cards card = obj as Cards;
+            if (card != null)
+            {
+                return this.Trump.CompareTo(card.Trump);
+            }
+            else if (card == null)
+            {
+                return 1;
+            }
+            else
+            {
+                throw new ArgumentException("object is not myArray");
+            }
+        }
+        public static bool CompareCards(Cards card1, Cards card2)
+        {
+            if (card1.SuitCard == card2.SuitCard)
+                if (card1.AttackCard == card2.AttackCard)
+                    return true;
+            return false;
         }
     }
 }

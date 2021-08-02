@@ -16,6 +16,7 @@ namespace MyLibrary
             cardsDeck = new Cards[36];
             count = 0;
             length = 36;
+            Filler();
         }
         public Cards this[int index]
         {                   
@@ -53,23 +54,8 @@ namespace MyLibrary
         }
         public int Count { get { return count; } private set { } }
         public int Length { get { return length; } private set { } }
-        public Cards CardsDeck
-        {
-            get 
-            { 
-                if (count < 36)
-                    return cardsDeck[count];
-                return null;
-            }
-            set
-            {
-                if (count < 36)
-                {
-                    cardsDeck[count] = value;
-                    count++;
-                }              
-            }
-        }
+        public Cards[] CardsDeck { get { return cardsDeck; } private set { } }
+
         public void CardsDeckShow()
         {
             for (int i = 0; i < count; i++)
@@ -86,7 +72,22 @@ namespace MyLibrary
             count--;
             return takeCard;
         }
-        private bool Ok(int index)
+
+        void Filler()
+        {
+            string[] suit = { "черви", "буби", "крести", "пики" };
+            string[] nameCard = {"шестерка","семерка","восьмерка","девятка","десятка","валет",
+                                "дама","король","туз"};
+            for (int i = 0; i < suit.Length; i++)
+            {
+                for (int attack = 0; attack < nameCard.Length; attack++)
+                {
+                    cardsDeck[count] = new Cards(nameCard[attack], suit[i], attack + 6);
+                    count++;
+                }
+            }
+        }
+        bool Ok(int index)
         {
             if (index >= 0 & index < 36)
                 return true;

@@ -8,7 +8,6 @@ namespace MyLibrary
     {
         List<Cards> desk;
         int length;
-        Cards card;
 
         public GameDesk()
         {
@@ -25,48 +24,37 @@ namespace MyLibrary
         }
         public int Length { get { return length; } private set { } }
 
-        public void GettingAttackPlayerCard(Cards cardAttack)
-        {            
-            card = cardAttack;
-        }
-        public bool GettingProtectedPlayerCard(Cards cardProtected)
+        public List<Cards> EndMove(Cards attack, Cards protection, bool endMove = false)
         {
-            if (cardProtected.Trump == 1 & card.Trump == 1)
+            if(!endMove)
             {
-                if (cardProtected.AttackCard > card.AttackCard)
+                DeskAdd(attack);
+                DeskAdd(protection);
+
+                if(protection == null)
                 {
-                    DeskAdd(card, cardProtected);
-                    return true;
+                    List<Cards> buf = desk;
+                    DeskClear();
+                    return buf;
                 }
-                desk.Add(card);
-                return false;
+                return null;
             }
-            else if (cardProtected.Trump == 1 & card.Trump != 1)
-            {
-                DeskAdd(card, cardProtected);
-                return true;
-            }
-            else if (card.Trump != 1 & cardProtected.AttackCard > card.AttackCard)
-            {
-                DeskAdd(card, cardProtected);
-                return true;
-            }
-            else
-            {
-                desk.Add(card);
-                return false;
-            }
+            DeskClear();
+            return desk;
         }
-        public void PutCardsBat()
+            
+        void DeskClear()
         {
             desk.Clear();
+            length = 0;
         }
-
-        void DeskAdd(Cards attack, Cards protect)
+        void DeskAdd(Cards card)
         {
-            desk.Add(attack);
-            desk.Add(protect);
-            length += 2;
+            if(card != null)
+            {
+                desk.Add(card);
+                length++;
+            }    
         }
 
     }

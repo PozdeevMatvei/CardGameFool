@@ -28,10 +28,10 @@ namespace CardsDeck
         public void DistributionCards(Deck deck)
         {
             while(player1.CountHand < 6)           
-                player1.TakeInHand(deck.TakeCardFromDeck());
+                player1[player1.CountHand] = (deck.TakeCardFromDeck());
             
             while (player2.CountHand < 6)
-                player2.TakeInHand(deck.TakeCardFromDeck());
+                player2[player2.CountHand] = (deck.TakeCardFromDeck());
         }
         public void DefineTrumpSuit(Deck deck)
         {
