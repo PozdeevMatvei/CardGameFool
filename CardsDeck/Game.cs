@@ -19,69 +19,29 @@ namespace CardsDeck
         }        
                
         public void SkirmishPlayers(Player pAttack, Player pProtected)
-        {         
-            if (PlayerAttack(pAttack))
+        {
+            Cards attack, protection;
+            List<Cards> desk;
+
+            do
             {
-                if (pProtected.Hand == null)
-                    return;
-                if (PlayerProtection(pProtected))
-                {
-                    this.SkirmishPlayers(pAttack, pProtected);
-                }
+                attack = pAttack.Attack(gameDesk);
+                protection = pProtected.Protection(attack);
+
+                if (pProtected.Hand == null || attack == null)
+                    desk = gameDesk.EndMove(attack, protection, true);
                 else
-                {
-                    foreach (Cards card in gameDesk.Desk)
-                    {
-                        pProtected.TakeInHand(card);
-                    }
-                    gameDesk.PutCardsBat();
-                }
-            }
-            else
+                    desk = gameDesk.EndMove(attack, protection);
+            } while (attack != null & protection != null & 
+                        pAttack.Hand != null & pProtected.Hand != null);
+
+
+            if (desk != null)
             {
-                gameDesk.PutCardsBat();
+                foreach (Cards deskCards in desk)
+                    pProtected[pProtected.CountHand] = deskCards;
             }
         }
-      
-        bool PlayerAttack(Player player)
-        {
-            bool attackFlag = false;
-            //SortingCardsHand(player);
-            if (gameDesk.Length == 0)
-            {
-                gameDesk.GettingAttackPlayerCard(player.GiveCardHand());
-                attackFlag = true;
-            }
-            else
-            {
-                Cards cardAttack = CompareCardsHandDesk(player, ref attackFlag);
-                if (attackFlag)
-                    gameDesk.GettingAttackPlayerCard(cardAttack);
-            }
-            return attackFlag;
-        }
-        bool PlayerProtection(Player player)
-        {            
-            //SortingCardsHand(player);
-            return gameDesk.GettingProtected(player);           
-        }
-        Cards CompareCardsHandDesk(Player player, ref bool attackFlag)
-        {
-            for (int index = player.CountHand-1; index <= 0; index++)
-            {
-                foreach (Cards cardDesk in gameDesk.Desk)
-                {
-                    if (player[index].AttackCard == cardDesk.AttackCard)
-                    {
-                        attackFlag = true;
-                        Cards cardAttack = player[index];
-                        player[index] = null;
-                        return cardAttack;
-                    }
-                }
-            }
-            attackFlag = false;
-            return null;
-        }       
+        
     }
 }

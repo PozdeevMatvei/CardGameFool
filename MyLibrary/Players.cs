@@ -35,12 +35,15 @@ namespace MyLibrary
                     if (value == null)
                     {
                         hand[countHand - 1] = value;
+                        SortingCardsHand();
                         countHand--;
                     }
                     else if (hand[index] == null)
                     {
                         hand[countHand] = value;
                         countHand++;
+                        if (countHand == 6) 
+                            SortingCardsHand();
                     }
                     else
                     {
@@ -54,75 +57,6 @@ namespace MyLibrary
         public string Name { get { return name; } private set { } }
         public int LengthCardsHand { get { return lengthCardsHand; } private set { } }
 
-        public void TakeInHand(Cards card)
-        {
-            hand[countHand] = card;
-            countHand++;
-        }
-        public Cards GiveCardHand()
-        {
-            Cards tmp = hand[countHand - 1];
-            hand[countHand - 1] = null;
-            countHand--;
-            return tmp;
-        }
-        public Cards GiveThisCardHand(Cards card)
-        {
-            for( int i = countHand-1; i >= 0; i++)
-            {
-                if(Cards.CompareCards(card,hand[i]))
-                {
-                    hand[i] = null;
-                    SortingCardsHand();
-                    countHand--;
-                }
-            }
-            return card;
-        }
-        bool GettingProtectedPlayerCard(Cards cardAttack, Cards cardProtected)
-        {
-            bool cardProtectedFlag = false;
-            if (cardProtected.Trump == 1 & cardAttack.Trump == 1)
-            {
-                if (cardProtected.AttackCard > cardAttack.AttackCard)
-                    cardProtectedFlag = true;
-            }
-            else if (cardProtected.Trump == 1)
-            {
-                cardProtectedFlag = true;
-            }
-            else if (cardAttack.Trump != 1)
-            {
-                if (cardProtected.SuitCard == cardAttack.SuitCard)
-                    if (cardProtected.AttackCard > cardAttack.AttackCard)
-                        cardProtectedFlag = true;
-            }
-            return cardProtectedFlag;
-        }
-        void SortingCardsHand()
-        {
-            Array.Sort(hand);
-            Array.Reverse(hand);
-
-            for (int i = CountHand - 1; i > 0; i--)
-            {
-                if (hand[i] != null & hand[i - 1] == null)
-                {
-                    hand[i - 1] = hand[i];
-                    hand[i] = null;
-                }
-                else if (hand[i].Trump == hand[i - 1].Trump)
-                {
-                    if (hand[i].AttackCard > hand[i - 1].AttackCard)
-                    {
-                        Cards bufMinAttack = hand[i - 1];
-                        hand[i - 1] = hand[i];
-                        hand[i] = bufMinAttack;
-                    }
-                }
-            }
-        }
-
         public void ShowHand()
         {
             foreach (var card in hand)
@@ -134,6 +68,99 @@ namespace MyLibrary
             Console.WriteLine("Number cards on hand {0}", countHand);
         }
 
+        public Cards Attack(GameDesk gameDesk)
+        {
+            int attackFlag = AttackCheck(gameDesk);
+            if (attackFlag != -1)
+            {
+                Cards buf = hand[attackFlag];
+                hand[attackFlag] = null;
+                DecreaseCountHand();
+                return buf;
+            }
+            return null;
+        }
+        public Cards Protection(Cards attack)
+        {
+            int protectionFlag = ProtectionCheck(attack);
+            if (protectionFlag != -1)
+            {
+                Cards buf = hand[protectionFlag];
+                hand[protectionFlag] = null;
+                DecreaseCountHand();
+                return buf;
+            }
+            return null;
+        }
+        int ProtectionCheck(Cards cardAttack)
+        {
+            if (cardAttack == null)
+                return -1;
+            int cardProtectedFlag = -1;
+            for (int i = countHand-1; i >= 0; i--)
+            { 
+                if (hand[i].Trump ==  cardAttack.Trump)
+                {
+                    if(hand[i].SuitCard == cardAttack.SuitCard)
+                        if (hand[i].AttackCard > cardAttack.AttackCard)
+                           return  i;
+                }
+                else if (hand[i].Trump == 1)
+                {
+                    return i;
+                }               
+            }
+            return cardProtectedFlag;
+        }
+        int AttackCheck(GameDesk gameDesk)
+        {
+            int attackFlag = -1;
+            if (gameDesk.Length == 0)
+            {
+                attackFlag = countHand-1;
+            }
+            else
+            {
+               for(int i = countHand-1; i >= 0; i--)
+                {
+                    foreach (Cards deskCard in gameDesk.Desk)
+                        if (hand[i].AttackCard == deskCard.AttackCard)
+                            attackFlag = i;
+                }
+            }
+            return attackFlag;
+        }
+        void DecreaseCountHand()
+        {
+            countHand--;
+            SortingCardsHand();   
+        }
+        void SortingCardsHand()
+        {
+            Array.Sort(hand);
+            Array.Reverse(hand);
+
+            for (int count = CountHand - 1; count > 0; count--)
+            {
+                for (int i = CountHand - 1; i > 0; i--)
+                {
+                    if (hand[i] != null & hand[i - 1] == null)
+                    {
+                        hand[i - 1] = hand[i];
+                        hand[i] = null;
+                    }
+                    else if (hand[i].Trump == hand[i - 1].Trump)
+                    {
+                        if (hand[i].AttackCard > hand[i - 1].AttackCard)
+                        {
+                            Cards bufMinAttack = hand[i - 1];
+                            hand[i - 1] = hand[i];
+                            hand[i] = bufMinAttack;
+                        }
+                    }
+                }
+            }
+        }        
         bool Ok(int index)
         {
             if (index >= 0 & index < lengthCardsHand)

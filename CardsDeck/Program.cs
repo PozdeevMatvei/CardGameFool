@@ -1,7 +1,7 @@
 ﻿using System;
 using MyLibrary;
 
-#warning Пройтись по коду где стоит breakpoint исправить неработающие методы, сделать рефакторинг
+#warning Do refactoring method SortingCardsHand. Walk along DoWhile. Refactoring DoWhile.
 namespace CardsDeck
 {
     class Program
@@ -9,7 +9,6 @@ namespace CardsDeck
         static void Main(string[] args)
         {
             Deck deck36 = new Deck();
-            DeckFiller.Filler(deck36);
             Console.WriteLine("DECK CARDS");
             deck36.CardsDeckShow();
             Console.WriteLine("---------");
@@ -23,30 +22,42 @@ namespace CardsDeck
             startGame.ShuffleCardsDeck(deck36);
             startGame.DefineTrumpSuit(deck36);
             startGame.DistributionCards(deck36);
-            startGame.WhoseMove(player1, player2);
 
-            while (deck36.CardsDeck != null || (player1.Hand != null & player2.Hand != null))
-            {
-                game.SkirmishPlayers(player1, player2);
-                startGame.DistributionCards(deck36);
-
-                Console.WriteLine("DECK CARDS");
-                deck36.CardsDeckShow();
-                Console.WriteLine("---------");
-
-                Console.WriteLine("HAND PLAYER1");
-                player1.ShowHand();
-                Console.WriteLine("HAND PLAYER2");
-                player2.ShowHand();
-            }
+            Player attack = startGame.WhoseMove(player1, player2);
+            Player protection;
+            if (attack == player1)
+                protection = player2;
+            else
+                protection = player1;
 
             Console.WriteLine("----------");
-            //game.SortingCardsHand(player1);
-            //game.SortingCardsHand(player2);
             Console.WriteLine("HAND PLAYER1");
             player1.ShowHand();
             Console.WriteLine("HAND PLAYER2");
-            player2.ShowHand();         
+            player2.ShowHand();
+
+            do
+            {
+                game.SkirmishPlayers(attack, protection);
+                startGame.DistributionCards(deck36);
+                if (player1.CountHand < player2.CountHand)
+                {
+                    attack = player1;
+                    protection = player2;
+                }
+                else
+                {
+                    attack = player2;
+                    protection = player1;
+                }
+            } while (deck36.Count != 0 || (player1.CountHand != 0 & player2.CountHand != 0));
+
+            Player playerWins;
+            if (player1.CountHand == 0)
+                playerWins = player1;
+            else
+                playerWins = player2;
+            Console.WriteLine("{0} player wins",playerWins.Name);
 
         }
     }
