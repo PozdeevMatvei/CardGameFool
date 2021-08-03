@@ -25,8 +25,19 @@ namespace CardsDeck
 
             do
             {
-                attack = pAttack.Attack(gameDesk);
+                attack = pAttack.Attack(gameDesk);                           
                 protection = pProtected.Protection(attack);
+
+                Console.WriteLine("{0} attack card: ", pAttack.Name);
+                if (attack != null)  attack.Show();
+                else Console.WriteLine("end attack");
+
+                Console.WriteLine("{0} protection card: ",pProtected.Name);
+                if (protection != null) protection.Show();
+                else if (attack != null) Console.WriteLine("did not protection");
+                else Console.WriteLine("end protection");
+
+                Console.WriteLine("------------");
 
                 if (pProtected.Hand == null || attack == null)
                     desk = gameDesk.EndMove(attack, protection, true);

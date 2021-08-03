@@ -52,5 +52,10 @@ namespace MyLibrary
                     return true;
             return false;
         }
+        public void Show()
+        {
+            if(this != null)
+            Console.WriteLine("{0} {1} {2} {3}", name, suit, attack, trump);
+        }
     }
 }

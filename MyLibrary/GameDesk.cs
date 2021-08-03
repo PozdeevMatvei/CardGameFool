@@ -31,9 +31,10 @@ namespace MyLibrary
                 DeskAdd(attack);
                 DeskAdd(protection);
 
-                if(protection == null)
+                if(protection == null & attack != null)
                 {
-                    List<Cards> buf = desk;
+                    List<Cards> buf = new List<Cards>();
+                    desk.CopyTo(buf.ToArray());
                     DeskClear();
                     return buf;
                 }

@@ -35,20 +35,34 @@ namespace CardsDeck
             player1.ShowHand();
             Console.WriteLine("HAND PLAYER2");
             player2.ShowHand();
+            Console.WriteLine("------------");
 
             do
             {
                 game.SkirmishPlayers(attack, protection);
+                Console.WriteLine("\n\n");    
                 startGame.DistributionCards(deck36);
+                Console.WriteLine("----------");
+                Console.WriteLine("HAND PLAYER1");
+                player1.ShowHand();
+                Console.WriteLine("HAND PLAYER2");
+                player2.ShowHand();
+                Console.WriteLine("------------");
                 if (player1.CountHand < player2.CountHand)
                 {
                     attack = player1;
                     protection = player2;
                 }
-                else
+                else if (player1.CountHand > player2.CountHand)
                 {
                     attack = player2;
                     protection = player1;
+                }
+                else
+                {
+                    Player buf = attack;
+                    attack = protection;
+                    protection = buf;
                 }
             } while (deck36.Count != 0 || (player1.CountHand != 0 & player2.CountHand != 0));
 
