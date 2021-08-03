@@ -25,21 +25,36 @@ namespace CardsDeck
 
             do
             {
-                attack = pAttack.Attack(gameDesk);
+                attack = pAttack.Attack(gameDesk);                           
                 protection = pProtected.Protection(attack);
 
-                if (pProtected.Hand == null || attack == null)
+                Console.WriteLine("{0} attack card: ", pAttack.Name);
+                if (attack != null)  attack.Show();
+                else Console.WriteLine("end attack");
+
+                Console.WriteLine("{0} protection card: ",pProtected.Name);
+                if (protection != null) protection.Show();
+                else if (attack != null) Console.WriteLine("did not protection");
+                else Console.WriteLine("end protection");
+
+                Console.WriteLine("------------");
+
+                if (pProtected.CountHand == 0 || attack == null)
                     desk = gameDesk.EndMove(attack, protection, true);
                 else
+                {
                     desk = gameDesk.EndMove(attack, protection);
+                }
             } while (attack != null & protection != null & 
-                        pAttack.Hand != null & pProtected.Hand != null);
+                        pAttack.CountHand != 0 & pProtected.CountHand != 0);
 
 
             if (desk != null)
             {
                 foreach (Cards deskCards in desk)
                     pProtected[pProtected.CountHand] = deskCards;
+                pProtected.SortingCardsHand();
+                gameDesk.EndMove(attack, protection, true);
             }
         }
         

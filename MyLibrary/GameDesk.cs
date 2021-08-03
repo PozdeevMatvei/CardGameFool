@@ -31,16 +31,14 @@ namespace MyLibrary
                 DeskAdd(attack);
                 DeskAdd(protection);
 
-                if(protection == null)
-                {
-                    List<Cards> buf = desk;
-                    DeskClear();
-                    return buf;
+                if(protection == null & attack != null)
+                {                    
+                    return desk;
                 }
                 return null;
             }
             DeskClear();
-            return desk;
+            return null;
         }
             
         void DeskClear()

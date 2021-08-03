@@ -67,6 +67,8 @@ namespace MyLibrary
         }
         public Cards TakeCardFromDeck()
         {
+            if (count == 0)
+                return null;
             Cards takeCard = cardsDeck[count - 1];
             cardsDeck[count - 1] = null;
             count--;
