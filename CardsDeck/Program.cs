@@ -1,7 +1,6 @@
 ﻿using System;
 using MyLibrary;
 
-#warning Do refactoring method SortingCardsHand. Walk along DoWhile. Refactoring DoWhile.
 namespace CardsDeck
 {
     class Program
@@ -21,49 +20,24 @@ namespace CardsDeck
 
             startGame.ShuffleCardsDeck(deck36);
             startGame.DefineTrumpSuit(deck36);
-            startGame.DistributionCards(deck36);
+            startGame.DistributionCards(deck36, ref player1, ref player2);
 
-            Player attack = startGame.WhoseMove(player1, player2);
-            Player protection;
-            if (attack == player1)
-                protection = player2;
-            else
-                protection = player1;
+            Player attack = new Player();
+            Player protection = new Player();
 
-            Console.WriteLine("----------");
-            Console.WriteLine("HAND PLAYER1");
-            player1.ShowHand();
-            Console.WriteLine("HAND PLAYER2");
-            player2.ShowHand();
-            Console.WriteLine("------------");
+            startGame.WhoseMoveFirst(player1, player2, ref attack,ref protection);
+
+            ShowHandsPlayers(player1, player2);
 
             do
             {
+                int countCardsProtection = protection.CountHand;
                 game.SkirmishPlayers(attack, protection);
-                Console.WriteLine("\n\n");    
-                startGame.DistributionCards(deck36);
-                Console.WriteLine("----------");
-                Console.WriteLine("HAND PLAYER1");
-                player1.ShowHand();
-                Console.WriteLine("HAND PLAYER2");
-                player2.ShowHand();
-                Console.WriteLine("------------");
-                if (player1.CountHand < player2.CountHand)
-                {
-                    attack = player1;
-                    protection = player2;
-                }
-                else if (player1.CountHand > player2.CountHand)
-                {
-                    attack = player2;
-                    protection = player1;
-                }
-                else
-                {
-                    Player buf = attack;
-                    attack = protection;
-                    protection = buf;
-                }
+                Console.WriteLine("\n");                
+                startGame.DistributionCards(deck36, ref attack, ref protection);
+                ShowHandsPlayers(player1, player2);
+                WhoseMove(countCardsProtection, ref attack, ref protection);
+
             } while (deck36.Count != 0 || (player1.CountHand != 0 & player2.CountHand != 0));
 
             Player playerWins;
@@ -71,8 +45,29 @@ namespace CardsDeck
                 playerWins = player1;
             else
                 playerWins = player2;
-            Console.WriteLine("{0} player wins",playerWins.Name);
+            Console.WriteLine("{0}  wins",playerWins.Name);
 
+        }
+        static void WhoseMove(int countCardsProtection, ref Player attack, ref Player protection)
+        {           
+            if(countCardsProtection >= protection.CountHand)
+            {
+                Player buf = attack;
+                attack = protection;
+                protection = buf;
+            }           
+            Console.WriteLine("Ходит {0}", attack.Name);
+            Console.WriteLine();
+        }
+        static void ShowHandsPlayers(Player player1, Player player2)
+        {
+            Console.WriteLine("----------");
+            Console.WriteLine("HAND PLAYER1");
+            player1.ShowHand();
+            Console.WriteLine();
+            Console.WriteLine("HAND PLAYER2");
+            player2.ShowHand();
+            Console.WriteLine("------------");
         }
     }
 }

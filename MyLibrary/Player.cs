@@ -10,6 +10,10 @@ namespace MyLibrary
         Cards[] hand;
         int lengthCardsHand;
         int countHand;
+        public Player()
+        {
+
+        }
         public Player(string name)
         {
             this.name = name;
@@ -93,49 +97,48 @@ namespace MyLibrary
             return null;
         }
         int ProtectionCheck(Cards cardAttack)
-        {
-            if (cardAttack == null)
-                return -1;
-            int cardProtectedFlag = -1;
-            for (int i = countHand-1; i >= 0; i--)
-            { 
-                if (hand[i].Trump ==  cardAttack.Trump)
-                {
-                    if(hand[i].SuitCard == cardAttack.SuitCard)
-                        if (hand[i].AttackCard > cardAttack.AttackCard)
-                           return  i;
+        {          
+            if(cardAttack != null)
+                for (int i = countHand-1; i >= 0; i--)
+                { 
+                    if (hand[i].Trump ==  cardAttack.Trump)
+                    {
+                        if(hand[i].SuitCard == cardAttack.SuitCard)
+                            if (hand[i].AttackCard > cardAttack.AttackCard)
+                               return  i;
+                    }
+                    else if (hand[i].Trump == 1)
+                    {
+                        return i;
+                    }               
                 }
-                else if (hand[i].Trump == 1)
-                {
-                    return i;
-                }               
-            }
-            return cardProtectedFlag;
+            return -1;
         }
         int AttackCheck(GameDesk gameDesk)
         {
-            int attackFlag = -1;
             if (gameDesk.Length == 0)
             {
-                attackFlag = countHand-1;
+                return countHand-1;
             }
             else
             {
-               for(int i = countHand-1; i >= 0; i--)
-                {
-                    foreach (Cards deskCard in gameDesk.Desk)
+                for (int i = countHand - 1; i >= 0; i--)
+                { 
+                    foreach (Cards deskCard in gameDesk.Desk)                                    
+                    {
                         if (hand[i].AttackCard == deskCard.AttackCard)
-                            attackFlag = i;
-                }
+                            return i;
+                    }
+                }                
             }
-            return attackFlag;
+            return -1;
         }
         void DecreaseCountHand()
         {
             countHand--;
             SortingCardsHand();   
         }
-        void SortingCardsHand()
+        public void SortingCardsHand()
         {
             Array.Sort(hand);
             Array.Reverse(hand);
@@ -144,12 +147,7 @@ namespace MyLibrary
             {
                 for (int i = CountHand - 1; i > 0; i--)
                 {
-                    if (hand[i] != null & hand[i - 1] == null)
-                    {
-                        hand[i - 1] = hand[i];
-                        hand[i] = null;
-                    }
-                    else if (hand[i].Trump == hand[i - 1].Trump)
+                    if (hand[i].Trump == hand[i - 1].Trump)
                     {
                         if (hand[i].AttackCard > hand[i - 1].AttackCard)
                         {

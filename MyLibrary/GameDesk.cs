@@ -32,16 +32,13 @@ namespace MyLibrary
                 DeskAdd(protection);
 
                 if(protection == null & attack != null)
-                {
-                    List<Cards> buf = new List<Cards>();
-                    desk.CopyTo(buf.ToArray());
-                    DeskClear();
-                    return buf;
+                {                    
+                    return desk;
                 }
                 return null;
             }
             DeskClear();
-            return desk;
+            return null;
         }
             
         void DeskClear()

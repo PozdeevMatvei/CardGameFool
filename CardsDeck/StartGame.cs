@@ -25,20 +25,20 @@ namespace CardsDeck
                 deck[i] = tmp;
             }
         }
-        public void DistributionCards(Deck deck)
+        public void DistributionCards(Deck deck, ref Player attack, ref Player protection)
         {
             if (deck.Count != 0)
             {
-                while (player1.CountHand < 6)
+                while (attack.CountHand < 6)
                 {
                     if (deck.Count == 0) break;
-                    player1[player1.CountHand] = (deck.TakeCardFromDeck());
+                    attack[attack.CountHand] = (deck.TakeCardFromDeck());
                 }
 
-                while (player2.CountHand < 6)
+                while (protection.CountHand < 6)
                 {
                     if (deck.Count == 0) break;
-                    player2[player2.CountHand] = (deck.TakeCardFromDeck());
+                    protection[protection.CountHand] = (deck.TakeCardFromDeck());
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace CardsDeck
             }
             Console.WriteLine("Козырь {0}", trump.SuitCard);
         }
-        public Player WhoseMove(Player player1, Player player2)
+        public void WhoseMoveFirst(Player player1, Player player2, ref Player attack, ref Player protection)
         {         
             Random r = new Random();
             Player playerMinTrump = CompareMinTrumpPlayer(player1, player2);
@@ -61,17 +61,23 @@ namespace CardsDeck
             if (playerMinTrump != null)
             {
                 Console.WriteLine("Первым ходит {0}", playerMinTrump.Name);
-                return playerMinTrump;
+                attack = playerMinTrump;
+                if (attack == player1)
+                    protection = player2;
+                else
+                    protection = player1;
             }
             else if (r.Next(1, 3) == 1)
             {
                 Console.WriteLine("Первым ходит {0}", player1.Name);
-                return player1;
+                attack = player1;
+                protection = player2;
             }
             else
             {
                 Console.WriteLine("Первым ходит {0}", player2.Name);
-                return player2;
+                attack = player2;
+                protection = player1;
             }                      
         }
 
