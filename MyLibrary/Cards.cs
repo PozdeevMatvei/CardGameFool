@@ -10,12 +10,12 @@ namespace MyLibrary
         string suit;
         int attack;
         int trump;
-        public Cards(string name, string suit, int attack)
+        public Cards(string name, string suit, int attack, int trump)
         {
             this.name = name;
             this.suit = suit;
             this.attack = attack;
-            trump = 0;
+            Trump = trump;
         }
         public string NameCard { get { return name; } private set { } }
         public string SuitCard { get { return suit; } private set { } }
@@ -25,8 +25,10 @@ namespace MyLibrary
             get { return trump; }
             set
             {
-                if (value == 0 || value == 1)
+                if (value == 1)
                     trump = value;
+                else
+                    trump = 0;
             }
         }
         public int CompareTo(object obj)

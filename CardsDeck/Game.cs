@@ -6,10 +6,10 @@ using MyLibrary;
 
 namespace CardsDeck
 {
-    class Game : IComparer
+    class Game : GameDesk, IComparer
     {      
         GameDesk gameDesk;
-        public Game(GameDesk gameDesk)
+        public Game(GameDesk gameDesk) : base ()
         {
             this.gameDesk = gameDesk;
         }
@@ -28,16 +28,7 @@ namespace CardsDeck
                 attack = pAttack.Attack(gameDesk);                           
                 protection = pProtected.Protection(attack);
 
-                Console.WriteLine("{0} attack card: ", pAttack.Name);
-                if (attack != null)  attack.Show();
-                else Console.WriteLine("end attack");
-
-                Console.WriteLine("{0} protection card: ",pProtected.Name);
-                if (protection != null) protection.Show();
-                else if (attack != null) Console.WriteLine("did not protection");
-                else Console.WriteLine("end protection");
-
-                Console.WriteLine("------------");
+                ShowSkirmish(attack, protection, pAttack, pProtected);            
 
                 if (pProtected.CountHand == 0 || attack == null)
                     desk = gameDesk.EndMove(attack, protection, true);
@@ -57,6 +48,19 @@ namespace CardsDeck
                 gameDesk.EndMove(attack, protection, true);
             }
         }
-        
+        void ShowSkirmish(Cards attack, Cards protection, Player pAttack, Player pProtection)
+        {
+            Console.WriteLine("{0} attack card: ", pAttack.Name);
+            if (attack != null) attack.Show();
+            else Console.WriteLine("end attack");
+
+            Console.WriteLine("{0} protection card: ", pProtection.Name);
+            if (protection != null) protection.Show();
+            else if (attack != null) Console.WriteLine("did not protection");
+            else Console.WriteLine("end protection");
+
+            Console.WriteLine("------------");
+        }
+
     }
 }

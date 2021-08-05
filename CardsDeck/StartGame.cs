@@ -24,6 +24,8 @@ namespace CardsDeck
                 deck[j] = deck[i];
                 deck[i] = tmp;
             }
+            TranspositionTrumpInBegining(deck);
+            
         }
         public void DistributionCards(Deck deck, ref Player attack, ref Player protection)
         {
@@ -41,17 +43,8 @@ namespace CardsDeck
                     protection[protection.CountHand] = (deck.TakeCardFromDeck());
                 }
             }
-        }
-        public void DefineTrumpSuit(Deck deck)
-        {
-            Random r = new Random();
-            Cards trump = deck[r.Next(deck.Count)];
-            foreach(Cards card in deck)
-            {
-                if (trump.SuitCard == card.SuitCard)
-                    card.Trump = 1;
-            }
-            Console.WriteLine("Козырь {0}", trump.SuitCard);
+            attack.SortingCardsHand();
+            protection.SortingCardsHand();
         }
         public void WhoseMoveFirst(Player player1, Player player2, ref Player attack, ref Player protection)
         {         
@@ -103,6 +96,21 @@ namespace CardsDeck
                 return player2;
             else
                 return null;
+        }
+        void TranspositionTrumpInBegining(Deck deck)
+        {
+            if(deck[0].Trump != 1)
+                for (int i = 0; i < deck.Count; i++)
+                {
+                    if(deck[i].Trump == 1)
+                    {
+                        Cards buf = deck[0];
+                        deck[0] = deck[i];
+                        deck[i] = buf;
+                        break;
+                    } 
+                        
+                }
         }
     }  
 }
