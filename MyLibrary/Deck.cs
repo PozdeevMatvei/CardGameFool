@@ -25,11 +25,8 @@ namespace MyLibrary
                 if (Ok(index))
                 {
                     return cardsDeck[index];
-                }
-                else
-                {
-                    return null;
-                }
+                } 
+                return null; 
             }
             set
             {
@@ -40,14 +37,14 @@ namespace MyLibrary
                         cardsDeck[count - 1] = value;
                         count--;
                     }
-                    else if (cardsDeck[index] != null)
-                    {
-                        cardsDeck[index] = value;
-                    }
-                    else
+                    else if (cardsDeck[index] == null)
                     {
                         cardsDeck[count] = value;
                         count++;
+                    }
+                    else
+                    {
+                        cardsDeck[index] = value; 
                     }
                 }
             }           
@@ -58,12 +55,13 @@ namespace MyLibrary
 
         public void CardsDeckShow()
         {
-            for (int i = 0; i < count; i++)
+            Console.WriteLine("DECK CARDS");
+            foreach (Cards card in cardsDeck)
             {
-                Cards e = cardsDeck[i];
-                Console.WriteLine("{0} {1} {2}", e.NameCard, e.SuitCard, e.AttackCard);
+                Console.WriteLine("{0} {1} {2}", card.NameCard, card.SuitCard, card.AttackCard);
             }
             Console.WriteLine("Number cards in deck {0}", count);
+            Console.WriteLine("---------------");
         }
         public Cards TakeCardFromDeck()
         {
@@ -77,6 +75,7 @@ namespace MyLibrary
 
         void Filler()
         {
+            int[] trumpSuit = DefineTrumpSuit();
             string[] suit = { "черви", "буби", "крести", "пики" };
             string[] nameCard = {"шестерка","семерка","восьмерка","девятка","десятка","валет",
                                 "дама","король","туз"};
@@ -84,14 +83,21 @@ namespace MyLibrary
             {
                 for (int attack = 0; attack < nameCard.Length; attack++)
                 {
-                    cardsDeck[count] = new Cards(nameCard[attack], suit[i], attack + 6);
+                    cardsDeck[count] = new Cards(nameCard[attack], suit[i], attack + 6, trumpSuit[i]);
                     count++;
                 }
             }
         }
+        int[] DefineTrumpSuit()
+        {
+            Random r = new Random();
+            int[] trumpSuit = { 0, 0, 0, 0 };
+            trumpSuit[r.Next(0, 4)] = 1;
+            return trumpSuit;
+        }
         bool Ok(int index)
         {
-            if (index >= 0 & index < 36)
+            if (index >= 0 & index < length)
                 return true;
             return false;
         }

@@ -14,14 +14,7 @@ namespace MyLibrary
             desk = new List<Cards>();
             length = 0;
         }
-        public List<Cards> Desk
-        {
-            get
-            {
-                return desk;
-            }
-            private set { }
-        }
+        public List<Cards> Desk { get { return desk; } private set { } }        
         public int Length { get { return length; } private set { } }
 
         public List<Cards> EndMove(Cards attack, Cards protection, bool endMove = false)

@@ -8,18 +8,14 @@ namespace CardsDeck
         static void Main(string[] args)
         {
             Deck deck36 = new Deck();
-            Console.WriteLine("DECK CARDS");
             deck36.CardsDeckShow();
-            Console.WriteLine("---------");
 
             Player player1 = new Player("player1");
             Player player2 = new Player("player2");
-            GameDesk gameDesk = new GameDesk();
             StartGame startGame = new StartGame(player1, player2);
-            Game game = new Game(gameDesk);
+            Game game = new Game(new GameDesk());
 
             startGame.ShuffleCardsDeck(deck36);
-            startGame.DefineTrumpSuit(deck36);
             startGame.DistributionCards(deck36, ref player1, ref player2);
 
             Player attack = new Player();
@@ -34,18 +30,13 @@ namespace CardsDeck
                 int countCardsProtection = protection.CountHand;
                 game.SkirmishPlayers(attack, protection);
                 Console.WriteLine("\n");                
-                startGame.DistributionCards(deck36, ref attack, ref protection);
+                startGame.DistributionCards(deck36, ref attack, ref protection);//distr
                 ShowHandsPlayers(player1, player2);
                 WhoseMove(countCardsProtection, ref attack, ref protection);
 
             } while (deck36.Count != 0 || (player1.CountHand != 0 & player2.CountHand != 0));
 
-            Player playerWins;
-            if (player1.CountHand == 0)
-                playerWins = player1;
-            else
-                playerWins = player2;
-            Console.WriteLine("{0}  wins",playerWins.Name);
+            PlayerWins(player1, player2);
 
         }
         static void WhoseMove(int countCardsProtection, ref Player attack, ref Player protection)
@@ -56,18 +47,25 @@ namespace CardsDeck
                 attack = protection;
                 protection = buf;
             }           
-            Console.WriteLine("Ходит {0}", attack.Name);
+            Console.WriteLine($"Ходит {attack.Name}");
             Console.WriteLine();
         }
         static void ShowHandsPlayers(Player player1, Player player2)
         {
-            Console.WriteLine("----------");
-            Console.WriteLine("HAND PLAYER1");
-            player1.ShowHand();
+            player1.ShowHand(player1.Name);
             Console.WriteLine();
-            Console.WriteLine("HAND PLAYER2");
-            player2.ShowHand();
-            Console.WriteLine("------------");
+            player2.ShowHand(player2.Name);
+        }
+        static void PlayerWins(Player player1, Player player2)
+        {
+            if (player1.CountHand == 0 && player2.CountHand == 0)
+            {
+                Console.WriteLine("Dead heaat");
+            }
+            else if (player1.CountHand == 0)
+                Console.WriteLine($"{player1.Name} wins!");
+            else
+                Console.WriteLine($"{player2.Name} wins!");
         }
     }
 }

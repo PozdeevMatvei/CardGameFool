@@ -39,8 +39,7 @@ namespace MyLibrary
                     if (value == null)
                     {
                         hand[countHand - 1] = value;
-                        SortingCardsHand();
-                        countHand--;
+                        DecreaseCountHand();
                     }
                     else if (hand[index] == null)
                     {
@@ -59,10 +58,11 @@ namespace MyLibrary
         public int CountHand { get { return countHand; } private set { } }
         public Cards[] Hand { get { return hand; } private set { } }
         public string Name { get { return name; } private set { } }
-        public int LengthCardsHand { get { return lengthCardsHand; } private set { } }
 
-        public void ShowHand()
+        public void ShowHand(string namePlayer)
         {
+            string name = namePlayer.ToUpper();
+            Console.WriteLine($"HAND {name}");
             foreach (var card in hand)
             {
                 if (card == null) break;
@@ -70,8 +70,29 @@ namespace MyLibrary
                                                     card.AttackCard, card.Trump);
             }
             Console.WriteLine("Number cards on hand {0}", countHand);
+            Console.WriteLine("---------------");
         }
+        public void SortingCardsHand()
+        {
+            Array.Sort(hand);
+            Array.Reverse(hand);
 
+            for (int count = CountHand - 1; count > 0; count--)
+            {
+                for (int i = CountHand - 1; i > 0; i--)
+                {
+                    if (hand[i].Trump == hand[i - 1].Trump)
+                    {
+                        if (hand[i].AttackCard > hand[i - 1].AttackCard)
+                        {
+                            Cards bufMinAttack = hand[i - 1];
+                            hand[i - 1] = hand[i];
+                            hand[i] = bufMinAttack;
+                        }
+                    }
+                }
+            }
+        }
         public Cards Attack(GameDesk gameDesk)
         {
             int attackFlag = AttackCheck(gameDesk);
@@ -96,6 +117,7 @@ namespace MyLibrary
             }
             return null;
         }
+
         int ProtectionCheck(Cards cardAttack)
         {          
             if(cardAttack != null)
@@ -137,28 +159,7 @@ namespace MyLibrary
         {
             countHand--;
             SortingCardsHand();   
-        }
-        public void SortingCardsHand()
-        {
-            Array.Sort(hand);
-            Array.Reverse(hand);
-
-            for (int count = CountHand - 1; count > 0; count--)
-            {
-                for (int i = CountHand - 1; i > 0; i--)
-                {
-                    if (hand[i].Trump == hand[i - 1].Trump)
-                    {
-                        if (hand[i].AttackCard > hand[i - 1].AttackCard)
-                        {
-                            Cards bufMinAttack = hand[i - 1];
-                            hand[i - 1] = hand[i];
-                            hand[i] = bufMinAttack;
-                        }
-                    }
-                }
-            }
-        }        
+        }     
         bool Ok(int index)
         {
             if (index >= 0 & index < lengthCardsHand)
