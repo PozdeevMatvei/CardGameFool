@@ -93,13 +93,18 @@ namespace MyLibrary
                 }
             }
         }
-        public Cards Attack(GameDesk gameDesk)
+        public Cards Attack(GameDesk gameDesk, bool attackFlag)
         {
-            int attackFlag = AttackCheck(gameDesk);
-            if (attackFlag != -1)
+            int attackIndex = AttackCheck(gameDesk);
+            if(attackFlag & attackIndex > -1)
             {
-                Cards buf = hand[attackFlag];
-                hand[attackFlag] = null;
+                if (hand[attackIndex].Trump == 1 || hand[attackIndex].AttackCard > 11)
+                    return null;
+            }
+            if (attackIndex != -1)
+            {
+                Cards buf = hand[attackIndex];
+                hand[attackIndex] = null;
                 DecreaseCountHand();
                 return buf;
             }

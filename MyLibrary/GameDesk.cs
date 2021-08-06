@@ -17,19 +17,21 @@ namespace MyLibrary
         public List<Cards> Desk { get { return desk; } private set { } }        
         public int Length { get { return length; } private set { } }
 
-        public List<Cards> EndMove(Cards attack, Cards protection, bool endMove = false)
+        public List<Cards> EndMove(Cards attack, Cards protection, bool attackFlag, bool endMove = false)
         {
             if(!endMove)
             {
                 DeskAdd(attack);
                 DeskAdd(protection);
 
-                if(protection == null & attack != null)
+                if(protection == null & attack == null )
                 {                    
                     return desk;
                 }
                 return null;
             }
+            if (attackFlag)
+                return desk;
             DeskClear();
             return null;
         }

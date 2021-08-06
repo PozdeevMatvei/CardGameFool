@@ -20,24 +20,31 @@ namespace CardsDeck
                
         public void SkirmishPlayers(Player pAttack, Player pProtected)
         {
-            Cards attack, protection;
+            Cards attack, protection = pProtected.Hand[pProtected.CountHand-1];
             List<Cards> desk;
+            bool attackFlag = false;
 
             do
             {
-                attack = pAttack.Attack(gameDesk);                           
-                protection = pProtected.Protection(attack);
+                
+                attack = pAttack.Attack(gameDesk, attackFlag);  // attackFlag                         
+                if (protection != null)
+                        protection = pProtected.Protection(attack);
 
                 ShowSkirmish(attack, protection, pAttack, pProtected);            
 
                 if (pProtected.CountHand == 0 || attack == null)
-                    desk = gameDesk.EndMove(attack, protection, true);
+                    desk = gameDesk.EndMove(attack, protection, attackFlag, true);
                 else
                 {
-                    desk = gameDesk.EndMove(attack, protection);
+                    desk = gameDesk.EndMove(attack, protection, attackFlag);
                 }
-            } while (attack != null & protection != null & 
-                        pAttack.CountHand != 0 & pProtected.CountHand != 0);
+
+                if (attack != null & protection == null)
+                    attackFlag = true;
+
+            } while (attack != null & pAttack.CountHand != 0 & pProtected.CountHand != 0);
+
 
 
             if (desk != null)
@@ -45,7 +52,7 @@ namespace CardsDeck
                 foreach (Cards deskCards in desk)
                     pProtected[pProtected.CountHand] = deskCards;
                 pProtected.SortingCardsHand();
-                gameDesk.EndMove(attack, protection, true);
+                gameDesk.EndMove(attack, protection,false, true);
             }
         }
         void ShowSkirmish(Cards attack, Cards protection, Player pAttack, Player pProtection)
